@@ -1,0 +1,43 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+	<script src="vendor/underscore.js" type="application/javascript"></script>
+	<script src="helpers/image_canvas.js" type="application/javascript"></script>
+	<script src="helpers/color.js" type="application/javascript"></script>
+	<script src="kmeans.js" type="application/javascript"></script>
+	<script type="text/javascript">
+
+
+		function init() {
+			var canvas = ImageCanvas("canvas");
+			canvas.draw("./marguerite.jpg", function() {
+				var kmeans = KMeans(canvas, 3);
+				var means = kmeans.process();
+				drawMeans(means);
+			});
+		}
+
+		function drawMeans(means) {
+			var canvas = document.getElementById("means");
+			var context = canvas.getContext("2d");
+
+			var rectWidth = (canvas.width / means.length);
+			for(var i = 0; i < means.length; i++) {
+				context.fillStyle = means[i].color.hex();
+				context.fillRect(i * rectWidth, 0, rectWidth, canvas.height);
+				console.log(means[i].closestPixels.length);
+			}
+		}
+
+
+	</script>
+</head>
+<body onLoad="init();">
+<div>
+	<canvas id="canvas" width="100" ></canvas>
+</div>
+<div>
+	<canvas id="means" width="300" height="30" ></canvas>
+</div>
+
+</html>
